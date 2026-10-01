@@ -2,6 +2,10 @@
 
 An e-commerce analytics project built on a training dataset (customers, orders, products, stores, website sessions) while working through Alex Freberg's free Power BI course. Nine report pages covering a CEO-level summary dashboard, customer and session behavior, product rankings, and geographic population context.
 
+![CEO Dashboard](Pictures/CEO_Dashboard.png)
+
+*The CEO Dashboard (default landing page): revenue and units KPIs, revenue trend by product category, sales by brand, session duration by store, and a population drilldown, with date-range and customer-region slicers.*
+
 ## Why this is a `.pbip`, not a `.pbix`
 
 This project is saved as a **Power BI Project** (`.pbip`) instead of the older `.pbix` format. A `.pbix` is a single zipped binary — GitHub can store it, but nobody can open it on the page, diff it, or see what's inside without launching Power BI Desktop.
@@ -18,13 +22,15 @@ A `.pbip` is a folder of plain text instead: the semantic model as TMDL and the 
 
 ## Data model
 
+![Star schema — model view](Pictures/Star%20Schema.png)
+
 Two fact tables at different grains, both tied back to shared dimensions:
 
 - **`sales`** — one row per sale (`sale_id`), with `date_id`, `customer_id`, `product_id`, `store_id`
 - **`website_sessions`** — one row per site visit (`session_id`), with `customer_id` and `store_id`
 - **Dimensions:** `customers`, `products`, `stores`, `dates`
 
-**`geographies`** (country/state/city, with a population figure) is deliberately **not** related to anything else in the model. There's no real foreign key tying it to the rest of this training dataset, so rather than force a fake join, it's left as a standalone table that only powers the population breakdown on the Geo page. It won't cross-filter with the rest of the report, and that's intentional, not an oversight.
+**`geographies`** (country/state/city, with a population figure) is deliberately **not** related to anything else in the model. There's no real foreign key tying it to the rest of this training dataset, so rather than force a fake join, it's left as a standalone table that only powers the population breakdowns (the Geo page and the CEO Dashboard's Population Drilldown donut). It won't cross-filter with the rest of the report — the date and region slicers don't move that donut, and that's intentional, not an oversight.
 
 ### A real modeling bug I found and fixed
 
