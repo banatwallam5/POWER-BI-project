@@ -1,0 +1,92 @@
+table dates
+	lineageTag: df7a2d7c-04c9-4eb3-bcb6-048b8eca7e28
+
+	column date_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 289bf6bc-f5c6-4fc4-adf9-63c414c719a3
+		summarizeBy: none
+		sourceColumn: date_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a58b5344-fe9d-4239-921c-e85a3cd78ae4
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column date_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c2d254d-8c24-4317-91b3-52327e65bc29
+		summarizeBy: sum
+		sourceColumn: date_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_day
+		dataType: int64
+		formatString: 0
+		lineageTag: 983a3528-b9ba-452b-b651-af604ba69fec
+		summarizeBy: sum
+		sourceColumn: date_day
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_weekday
+		dataType: string
+		lineageTag: 72063503-a5fb-4da0-8d37-d2d2aa0aa152
+		summarizeBy: none
+		sourceColumn: date_weekday
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_week
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c9f083a-2481-472c-bbd2-f6838a7cda8c
+		summarizeBy: sum
+		sourceColumn: date_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_year = YEAR(dates[date])
+		formatString: 0
+		lineageTag: 63ce18c7-e416-44a3-9456-40a325ea2ecd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Calendar Hierarchy'
+		lineageTag: 521faad8-789f-4850-abca-a014bf596d19
+
+		level date_year
+			lineageTag: c06f9776-0cc1-48bd-9757-27740acbd923
+			column: date_year
+
+		level date_month
+			lineageTag: e951d189-5537-402f-b129-1eadb1d214a2
+			column: date_month
+
+		level date_day
+			lineageTag: 02ca92a3-c6f8-42b4-afbd-875c0f15e687
+			column: date_day
+
+	partition dates = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\haroo\OneDrive\Documents\Job search\Projects\Power BI\Alex the analysts data vix project\dates.csv"), [Delimiter = ",", Columns = 6, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"date_id", Int64.Type}, {"date", type date}, {"date_month", Int64.Type}, {"date_day", Int64.Type}, {"date_weekday", type text}, {"date_week", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

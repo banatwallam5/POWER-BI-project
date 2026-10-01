@@ -1,0 +1,126 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "053eefc428239c1d8c0e",
+  "position": {
+    "x": 8.7537993920972639,
+    "y": 0,
+    "z": 0,
+    "height": 1060.6686930091184,
+    "width": 1496.8996960486322,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "sales"
+                    }
+                  },
+                  "Property": "total_revenue"
+                }
+              },
+              "queryRef": "sales.total_revenue",
+              "nativeQueryRef": "total_revenue"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "sales"
+                    }
+                  },
+                  "Property": "total_units_sold"
+                }
+              },
+              "queryRef": "sales.total_units_sold",
+              "nativeQueryRef": "total_units_sold"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "customers"
+                    }
+                  },
+                  "Property": "customer_avg_age"
+                }
+              },
+              "queryRef": "customers.customer_avg_age",
+              "nativeQueryRef": "customer_avg_age"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "sales"
+                    }
+                  },
+                  "Property": "Revenue_in_feb"
+                }
+              },
+              "queryRef": "sales.Revenue_in_feb",
+              "nativeQueryRef": "Revenue_in_feb"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "stores"
+                    }
+                  },
+                  "Property": "oldest_store_open_date"
+                }
+              },
+              "queryRef": "stores.oldest_store_open_date",
+              "nativeQueryRef": "oldest_store_open_date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "website_sessions"
+                    }
+                  },
+                  "Property": "session_quality_score_avg_scaled"
+                }
+              },
+              "queryRef": "website_sessions.Measure",
+              "nativeQueryRef": "session_quality_score_avg_scaled"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "sales"
+                  }
+                },
+                "Property": "total_revenue"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

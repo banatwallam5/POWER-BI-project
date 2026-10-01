@@ -1,0 +1,85 @@
+table products
+	lineageTag: 6fd23e3b-0352-4f31-b3a6-355b93e79727
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 431eb14e-de3f-48dd-8f9e-404613ed3793
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: 945d182e-56c9-42e2-9e38-162566e83f56
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_category
+		dataType: string
+		lineageTag: bf100d59-7aa0-4d40-b5af-ef4e3bcca787
+		summarizeBy: none
+		sourceColumn: product_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_brand
+		dataType: string
+		lineageTag: 9050da00-107f-4132-af94-445eed03b841
+		summarizeBy: none
+		sourceColumn: product_brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_model
+		dataType: string
+		lineageTag: 62389750-4579-4872-b0d7-0ea833422128
+		summarizeBy: none
+		sourceColumn: product_model
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_list_price
+		dataType: double
+		lineageTag: 0d97072e-01d2-4603-ae64-aebc4db1555e
+		summarizeBy: none
+		sourceColumn: product_list_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_standard_cost
+		dataType: double
+		lineageTag: 76dd2fa4-28aa-46b2-90fa-229ce7e59a74
+		summarizeBy: none
+		sourceColumn: product_standard_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e9fea77f-c123-4d3a-87bd-6d7a3672e492
+		summarizeBy: none
+		sourceColumn: product_is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	partition products = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\haroo\OneDrive\Documents\Job search\Projects\Power BI\Alex the analysts data vix project\products.csv"), [Delimiter = ",", Columns = 8, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"product_id", Int64.Type}, {"product_name", type text}, {"product_category", type text}, {"product_brand", type text}, {"product_model", type text}, {"product_list_price", type number}, {"product_standard_cost", type number}, {"product_is_active", type logical}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

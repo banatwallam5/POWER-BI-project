@@ -1,0 +1,131 @@
+table sales
+	lineageTag: f236813b-c5f6-48a9-9029-5ce64f7ff542
+
+	measure total_revenue = SUM(sales[discounted_price])
+		lineageTag: c8ca9961-c5ac-47a4-ad06-f22786bd23ad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure total_units_sold = sum(sales[sale_quantity])
+		formatString: 0
+		lineageTag: fe4bda63-2dd1-4447-a016-784130c150b6
+
+	measure Revenue_in_feb = CALCULATE(sales[total_revenue],dates[date]>=date(2025,02,1),dates[date]<=date(2025,02,28))
+		formatString: 0
+		lineageTag: 6927c90d-a61f-4657-a9a1-c392b7111288
+
+	column sale_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 53f9c75c-d666-4022-8d34-ab9cd0d5bbd2
+		summarizeBy: sum
+		sourceColumn: sale_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a4bb7570-00e4-4535-8c20-5778acf19cb2
+		summarizeBy: none
+		sourceColumn: date_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 646075e7-13f7-4247-b94f-501415d76e4d
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a1aec214-a196-4129-b027-5fa2efb8b198
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d3ad1cb-b657-4cf6-8cb4-bb3fa9ebc6c6
+		summarizeBy: none
+		sourceColumn: store_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: d022ddc7-672b-4a3a-9665-306df0b0758f
+		summarizeBy: sum
+		sourceColumn: sale_quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column sale_discount
+		dataType: double
+		lineageTag: fdd4c543-0b25-425c-9864-22e35c6c4f23
+		summarizeBy: sum
+		sourceColumn: sale_discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column price = sales[sale_quantity] * RELATED(products[product_list_price])
+		lineageTag: d340b877-02ad-4abb-af1f-2a1e6bda0b2b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Discounted_price = sales[price]-sales[sale_discount]*sales[price]
+		lineageTag: 044edd2c-ddbb-4079-95e5-b10191e6eae6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column bulk_order = if(sales[sale_quantity]>3,True,FALSE)
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 23e052cd-ab5e-4f4d-8021-6aabc749cc17
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderSize =
+			
+			SWITCH(
+			   TRUE,
+			   sales[Discounted_price] < 100, "Tiny",
+			   sales[Discounted_price] < 200, "Mid",
+			   "Massive"
+			)
+		lineageTag: 7cdd94f3-d753-4902-b763-22329fe179ed
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition sales = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\haroo\OneDrive\Documents\Job search\Projects\Power BI\Alex the analysts data vix project\sales.csv"), [Delimiter = ",", Columns = 7, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"sale_id", Int64.Type}, {"date_id", Int64.Type}, {"customer_id", Int64.Type}, {"product_id", Int64.Type}, {"store_id", Int64.Type}, {"sale_quantity", Int64.Type}, {"sale_discount", type number}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Changed column type", {"sale_id"})
+				in
+				  #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

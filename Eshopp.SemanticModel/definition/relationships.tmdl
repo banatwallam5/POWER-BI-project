@@ -1,0 +1,24 @@
+relationship AutoDetected_281453f2-46b1-4667-8093-7554ec8b3f30
+	fromColumn: website_sessions.customer_id
+	toColumn: customers.customer_id
+
+relationship AutoDetected_2509a76b-dc44-4ff7-a565-5d2c477e60ba
+	fromColumn: sales.customer_id
+	toColumn: customers.customer_id
+
+relationship AutoDetected_802dd2fb-c030-476e-b2a3-ceaa40723ddf
+	fromColumn: sales.date_id
+	toColumn: dates.date_id
+
+relationship AutoDetected_953120ac-6185-48b1-9e82-bcbd34b3a71d
+	fromColumn: website_sessions.store_id
+	toColumn: stores.store_id
+
+relationship AutoDetected_1b0f2cd1-849d-46e9-abee-6efa56ae58fe
+	fromColumn: sales.store_id
+	toColumn: stores.store_id
+
+relationship 5dc7d1df-d408-0992-5950-dd390ec44351
+	fromColumn: sales.product_id
+	toColumn: products.product_id
+

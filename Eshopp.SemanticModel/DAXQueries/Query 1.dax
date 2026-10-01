@@ -1,0 +1,17 @@
+// Welcome to DAX query view! Learn more about DAX queries at https://aka.ms/dax-queries.
+// Right-click on tables, columns, or measures in the data pane to access quick queries, or ask Copilot for help writing DAX.
+EVALUATE
+SELECTCOLUMNS(
+    customers,
+    "customer_age", customers[customer_age],
+    "customer_name", customers[customer_name]
+)
+
+EVALUATE
+ADDCOLUMNS(
+  sales,
+  "Sale_price", sales[sale_quantity] * RELATED(products[product_list_price]),
+  "days_before_migration", datediff(RELATED(dates[date]),Date(2025, 02, 14),DAY)
+)
+order by
+    [days_before_migration] desc

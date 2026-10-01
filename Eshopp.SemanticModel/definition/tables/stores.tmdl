@@ -1,0 +1,68 @@
+table stores
+	lineageTag: cb1c3556-7299-4d31-9801-d60103e0a287
+
+	measure oldest_store_open_date = ```
+			min(stores[store_open_date]) 
+			```
+		formatString: General Date
+		lineageTag: 5635b1fe-b647-43a3-869e-1331d294b98b
+
+	column store_id
+		dataType: int64
+		formatString: 0
+		lineageTag: bd265fab-21e7-4e33-ba95-beb899ce5859
+		summarizeBy: none
+		sourceColumn: store_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_name
+		dataType: string
+		lineageTag: 01518b2d-fe42-4159-af4d-3f031d65e997
+		summarizeBy: none
+		sourceColumn: store_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_type
+		dataType: string
+		lineageTag: 9c9c76d2-aa66-4881-bc26-283f31d12a9e
+		summarizeBy: none
+		sourceColumn: store_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_open_date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: e136cdcc-6d25-4e43-a695-56c45f4dc96f
+		summarizeBy: none
+		sourceColumn: store_open_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column store_location
+		dataType: string
+		lineageTag: 9db5e9a6-c8cb-4b91-8dba-f743e5266ff7
+		summarizeBy: none
+		sourceColumn: store_location
+
+		annotation SummarizationSetBy = Automatic
+
+	partition stores = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\haroo\OneDrive\Documents\Job search\Projects\Power BI\Alex the analysts data vix project\stores.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"store_id", Int64.Type}, {"store_name", type text}, {"store_type", type text}, {"store_open_date", type date}, {"store_location", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+
